@@ -2,20 +2,8 @@ pipeline {
     agent any
 
     stages {
-
-        stage("Checkout"){
-
-          steps{
-
-            echo "Cloning repo"
-            git branch: 'main', 
-                url:'https://github.com/hoangStud13/learn-jenkins-app.git'
-
-          }
-
-        }
         
-        stage('Install') {
+        stage('Build') {
             agent{
                 docker {
                     image 'node:18-alpine'
@@ -25,21 +13,15 @@ pipeline {
             steps {
                 sh'''
 
-                npm install
-                npm build
+                npm ci
+                npm run build
+                ls -la
 
                 '''
             }
                 
             }
 
-            stage('with docker') {
-              steps{
-                sh '''
-                npm start
-                '''
-              }
-            }
             
         }
     }
